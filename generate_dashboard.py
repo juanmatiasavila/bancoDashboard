@@ -219,622 +219,624 @@ def main():
 <html lang="es">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Dashboard Financiero - Banco Macro</title>
-    <!-- Google Fonts -->
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+    <meta name="theme-color" content="#0a0a0f">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <title>Dashboard Financiero · Banco Macro</title>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700&display=swap" rel="stylesheet">
-    <!-- Phosphor Icons -->
+    <link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=Figtree:wght@300;400;500;600;700&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
     <script src="https://unpkg.com/@phosphor-icons/web"></script>
     <style>
         :root {{
-            --bg-color: #0f172a;
-            --surface-color: #1e293b;
-            --surface-hover: #334155;
-            --text-main: #f8fafc;
-            --text-muted: #94a3b8;
-            --accent-blue: #3b82f6;
-            --success: #10b981;
-            --danger: #ef4444;
-            --warning: #f59e0b;
-            --border: #334155;
-            --font-main: 'Outfit', sans-serif;
-            --shadow-md: 0 4px 6px -1px rgb(0 0 0 / 0.1), 0 2px 4px -2px rgb(0 0 0 / 0.1);
+            --bg:       #0a0a0f;
+            --surface:  #111118;
+            --surface2: #1a1a24;
+            --surface3: #22222f;
+            --border:   rgba(255,255,255,0.07);
+            --border2:  rgba(255,255,255,0.12);
+            --text:     #f0eee8;
+            --muted:    #7a7a8c;
+            --faint:    #3a3a4a;
+            --gold:     #c9a84c;
+            --gold-dim: rgba(201,168,76,0.15);
+            --gold-glow:rgba(201,168,76,0.08);
+            --green:    #4ade80;
+            --green-dim:rgba(74,222,128,0.12);
+            --red:      #f87171;
+            --red-dim:  rgba(248,113,113,0.12);
+            --amber:    #fbbf24;
+            --amber-dim:rgba(251,191,36,0.12);
+            --serif:    'DM Serif Display', Georgia, serif;
+            --sans:     'Figtree', system-ui, sans-serif;
+            --mono:     'DM Mono', 'Courier New', monospace;
+            --radius:   16px;
+            --radius-sm:10px;
+            --safe-bottom: env(safe-area-inset-bottom, 0px);
         }}
 
-        * {{
-            margin: 0;
-            padding: 0;
+        *, *::before, *::after {{
+            margin: 0; padding: 0;
             box-sizing: border-box;
+            -webkit-tap-highlight-color: transparent;
         }}
+
+        html {{ scroll-behavior: smooth; }}
 
         body {{
-            font-family: var(--font-main);
-            background-color: var(--bg-color);
-            color: var(--text-main);
+            font-family: var(--sans);
+            background: var(--bg);
+            color: var(--text);
+            min-height: 100dvh;
             line-height: 1.5;
-            padding-bottom: 40px;
+            overflow-x: hidden;
+            padding-bottom: calc(60px + var(--safe-bottom));
         }}
 
+        /* Noise texture overlay */
+        body::before {{
+            content: '';
+            position: fixed;
+            inset: 0;
+            background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.04'/%3E%3C/svg%3E");
+            pointer-events: none;
+            z-index: 0;
+            opacity: 0.6;
+        }}
+
+        /* Header */
         header {{
-            background: rgba(30, 41, 59, 0.8);
-            backdrop-filter: blur(12px);
             position: sticky;
             top: 0;
-            z-index: 50;
-            padding: 1.5rem 0;
+            z-index: 100;
+            background: rgba(10,10,15,0.88);
+            backdrop-filter: blur(20px) saturate(1.4);
+            -webkit-backdrop-filter: blur(20px) saturate(1.4);
             border-bottom: 1px solid var(--border);
-            margin-bottom: 2rem;
-            box-shadow: var(--shadow-md);
         }}
 
-        .container {{
-            max-width: 1000px;
+        .header-inner {{
+            max-width: 700px;
             margin: 0 auto;
-            padding: 0 1.5rem;
-        }}
-
-        .header-content {{
+            padding: 0.85rem 1.25rem;
             display: flex;
+            align-items: center;
             justify-content: space-between;
-            align-items: center;
-        }}
-
-        .brand {{
-            display: flex;
-            align-items: center;
-            gap: 0.75rem;
-            font-size: 1.5rem;
-            font-weight: 700;
-            color: #fff;
-        }}
-
-        .brand i {{
-            color: var(--accent-blue);
-            font-size: 2rem;
-        }}
-
-        .balance-summary {{
-            display: flex;
-            gap: 2rem;
-            align-items: center;
-            background: var(--surface-color);
-            padding: 0.75rem 1.5rem;
-            border-radius: 9999px;
-            border: 1px solid var(--border);
-        }}
-
-        .balance-item {{
-            display: flex;
-            align-items: center;
-            gap: 0.5rem;
-            font-size: 0.875rem;
-            font-weight: 500;
-        }}
-
-        .balance-item.success {{ color: var(--success); }}
-        .balance-item.danger {{ color: var(--danger); }}
-        .balance-item.warning {{ color: var(--warning); }}
-        
-        /* Account Selector Tab */
-        .account-selector {{
-            display: flex;
             gap: 1rem;
-            margin-bottom: 2rem;
+        }}
+
+        .brand {{ display: flex; align-items: center; gap: 0.6rem; }}
+
+        .brand-icon {{
+            width: 34px; height: 34px;
+            border-radius: 9px;
+            background: var(--gold-dim);
+            border: 1px solid rgba(201,168,76,0.3);
+            display: flex; align-items: center; justify-content: center;
+            color: var(--gold);
+            font-size: 1rem;
+            flex-shrink: 0;
+        }}
+
+        .brand-text {{
+            font-family: var(--serif);
+            font-size: 1.05rem;
+            color: var(--text);
+            letter-spacing: -0.01em;
+            line-height: 1.2;
+        }}
+
+        .brand-sub {{
+            font-family: var(--sans);
+            font-size: 0.62rem;
+            color: var(--muted);
+            font-weight: 400;
+            letter-spacing: 0.08em;
+            text-transform: uppercase;
+        }}
+
+        .global-pills {{
+            display: flex;
+            gap: 0.4rem;
+            flex-wrap: wrap;
+            justify-content: flex-end;
+        }}
+
+        .gpill {{
+            display: flex; align-items: center; gap: 0.3rem;
+            padding: 0.28rem 0.6rem;
+            border-radius: 999px;
+            font-size: 0.7rem;
+            font-weight: 600;
+            font-family: var(--mono);
+            border: 1px solid transparent;
+            white-space: nowrap;
+        }}
+        .gpill.inc {{ background: var(--green-dim); color: var(--green); border-color: rgba(74,222,128,0.2); }}
+        .gpill.exp {{ background: var(--red-dim);   color: var(--red);   border-color: rgba(248,113,113,0.2); }}
+        .gpill.cmp {{ background: var(--amber-dim); color: var(--amber); border-color: rgba(251,191,36,0.2); }}
+
+        /* Layout */
+        .container {{
+            max-width: 700px;
+            margin: 0 auto;
+            padding: 1.1rem 0.875rem;
+            position: relative;
+            z-index: 1;
+        }}
+
+        /* Account Tabs */
+        .account-tabs {{
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 0.6rem;
+            margin-bottom: 1.25rem;
         }}
 
         .acc-btn {{
-            flex: 1;
-            padding: 1rem;
-            border-radius: 1rem;
-            background: var(--surface-color);
-            border: 2px solid var(--border);
-            color: var(--text-muted);
-            font-family: var(--font-main);
-            font-size: 1.1rem;
-            font-weight: 600;
-            cursor: pointer;
-            transition: all 0.3s ease;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            gap: 0.5rem;
-        }}
-
-        .acc-btn:hover {{
-            border-color: #475569;
-            color: var(--text-main);
-        }}
-
-        .acc-btn.active {{
-            background: rgba(59, 130, 246, 0.1);
-            border-color: var(--accent-blue);
-            color: var(--accent-blue);
-        }}
-
-        /* Acordeones */
-        .accordion-item {{
-            margin-bottom: 1.5rem;
-            border-radius: 1rem;
-            background: var(--surface-color);
+            padding: 0.8rem 1rem;
+            border-radius: var(--radius-sm);
+            background: var(--surface);
             border: 1px solid var(--border);
-            overflow: hidden;
-            box-shadow: var(--shadow-md);
-            transition: all 0.3s ease;
-        }}
-
-        .accordion-item:hover {{
-            border-color: #475569;
-        }}
-
-        .accordion-header {{
-            width: 100%;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            padding: 1.5rem;
-            background: transparent;
-            border: none;
-            color: var(--text-main);
-            font-family: var(--font-main);
-            cursor: pointer;
-            transition: background 0.2s ease;
-        }}
-
-        .accordion-header:hover {{
-            background: var(--surface-hover);
-        }}
-
-        .month-title {{
-            display: flex;
-            align-items: center;
-            gap: 1rem;
-            font-size: 1.25rem;
+            color: var(--muted);
+            font-family: var(--sans);
+            font-size: 0.83rem;
             font-weight: 600;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            display: flex; align-items: center; justify-content: center; gap: 0.4rem;
         }}
+
+        .acc-btn i {{ font-size: 1rem; }}
+        .acc-btn:active {{ transform: scale(0.97); }}
+        .acc-btn.active {{
+            background: var(--gold-dim);
+            border-color: rgba(201,168,76,0.4);
+            color: var(--gold);
+        }}
+
+        /* Month Accordion */
+        .month-card {{
+            background: var(--surface);
+            border: 1px solid var(--border);
+            border-radius: var(--radius);
+            margin-bottom: 0.65rem;
+            overflow: hidden;
+            transition: border-color 0.2s;
+        }}
+
+        .month-card.open {{ border-color: var(--border2); }}
+
+        .month-header {{
+            width: 100%;
+            background: none; border: none;
+            color: var(--text);
+            font-family: var(--sans);
+            cursor: pointer;
+            padding: 0.9rem 1.1rem;
+            display: flex; flex-direction: column; gap: 0.7rem;
+            text-align: left;
+            transition: background 0.15s;
+        }}
+
+        .month-header:active {{ background: var(--surface2); }}
+
+        .month-header-top {{
+            display: flex; align-items: center; justify-content: space-between;
+        }}
+
+        .month-label {{ display: flex; align-items: center; gap: 0.5rem; flex-wrap: wrap; }}
+        .month-label i {{ font-size: 0.9rem; color: var(--gold); opacity: 0.8; }}
+
+        .month-name {{
+            font-family: var(--serif);
+            font-size: 1.1rem;
+            color: var(--text);
+            letter-spacing: -0.01em;
+        }}
+
+        .month-chevron {{
+            font-size: 1rem;
+            color: var(--muted);
+            transition: transform 0.3s ease;
+            flex-shrink: 0;
+        }}
+
+        .month-card.open .month-chevron {{ transform: rotate(180deg); }}
 
         .month-stats {{
-            display: flex;
-            gap: 1.5rem;
-            align-items: center;
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 0.45rem;
         }}
 
-        .stat {{
-            display: flex;
-            flex-direction: column;
-            align-items: flex-end;
+        .mstat {{
+            background: var(--surface2);
+            border-radius: 8px;
+            padding: 0.45rem 0.55rem;
         }}
 
-        .stat span:first-child {{
-            font-size: 0.75rem;
-            color: var(--text-muted);
+        .mstat-label {{
+            font-size: 0.6rem;
             text-transform: uppercase;
-            letter-spacing: 0.05em;
-        }}
-
-        .stat span:last-child {{
+            letter-spacing: 0.07em;
+            color: var(--muted);
             font-weight: 600;
-            font-size: 1.125rem;
         }}
 
-        .stat.inc {{ color: var(--success); }}
-        .stat.exp {{ color: var(--danger); }}
-        .stat.comp {{ color: var(--warning); }}
-
-        .accordion-icon {{
-            font-size: 1.25rem;
-            color: var(--text-muted);
-            transition: transform 0.3s ease;
-        }}
-        
-        .accordion-header.active .accordion-icon {{
-            transform: rotate(180deg);
+        .mstat-value {{
+            font-family: var(--mono);
+            font-size: 0.78rem;
+            font-weight: 500;
+            line-height: 1.3;
+            margin-top: 0.1rem;
         }}
 
-        .accordion-content {{
-            display: none;
-            padding: 0 1.5rem 1.5rem;
-            border-top: 1px solid var(--border);
+        .mstat.inc .mstat-value {{ color: var(--green); }}
+        .mstat.exp .mstat-value {{ color: var(--red); }}
+        .mstat.cmp .mstat-value {{ color: var(--amber); }}
+
+        .balance-chip {{
+            display: inline-flex; align-items: center; gap: 0.25rem;
+            padding: 0.18rem 0.55rem;
+            border-radius: 999px;
+            font-size: 0.68rem; font-weight: 600;
+            font-family: var(--mono);
         }}
 
-        .accordion-content.active {{
-            display: block;
-            animation: fadeIn 0.4s ease;
+        .balance-chip.pos {{ background: var(--green-dim); color: var(--green); }}
+        .balance-chip.neg {{ background: var(--red-dim);   color: var(--red); }}
+
+        /* Month Content */
+        .month-content {{ display: none; border-top: 1px solid var(--border); }}
+        .month-content.open {{ display: block; animation: slideDown 0.22s ease; }}
+
+        @keyframes slideDown {{
+            from {{ opacity: 0; transform: translateY(-5px); }}
+            to   {{ opacity: 1; transform: translateY(0); }}
         }}
 
-        @keyframes fadeIn {{
-            from {{ opacity: 0; transform: translateY(-10px); }}
-            to {{ opacity: 1; transform: translateY(0); }}
-        }}
-
-        /* Sub Acordeones (Ingresos / Gastos / Compensaciones) */
+        /* Type Tabs */
         .type-tabs {{
             display: flex;
-            gap: 1rem;
-            margin-top: 1.5rem;
-            margin-bottom: 1rem;
-            border-bottom: 2px solid var(--border);
+            overflow-x: auto;
+            -ms-overflow-style: none; scrollbar-width: none;
+            border-bottom: 1px solid var(--border);
+            padding: 0 1rem; gap: 0;
         }}
+        .type-tabs::-webkit-scrollbar {{ display: none; }}
 
         .type-tab {{
-            padding: 0.75rem 1.5rem;
-            font-weight: 600;
-            color: var(--text-muted);
-            background: none;
-            border: none;
-            cursor: pointer;
-            position: relative;
-            font-family: inherit;
-            font-size: 1rem;
+            flex-shrink: 0;
+            padding: 0.75rem 0.9rem;
+            font-family: var(--sans);
+            font-size: 0.78rem; font-weight: 600;
+            color: var(--muted);
+            background: none; border: none;
+            cursor: pointer; position: relative;
+            letter-spacing: 0.02em;
             transition: color 0.2s;
+            white-space: nowrap;
         }}
 
-        .type-tab:hover {{
-            color: var(--text-main);
-        }}
-
-        .type-tab.active {{
-            color: var(--text-main);
-        }}
-
+        .type-tab.active {{ color: var(--text); }}
         .type-tab.active::after {{
             content: '';
             position: absolute;
-            bottom: -2px;
-            left: 0;
-            right: 0;
+            bottom: 0; left: 0; right: 0;
             height: 2px;
-            background: var(--accent-blue);
+            background: var(--gold);
             border-radius: 2px 2px 0 0;
         }}
 
-        /* Group Acordeón (Descripción) */
-        .group-accordion {{
-            margin-bottom: 0.75rem;
+        .tab-panel {{ padding: 0.65rem; }}
+
+        /* Group Accordion */
+        .group-item {{
+            background: var(--surface2);
             border: 1px solid var(--border);
-            border-radius: 0.75rem;
-            background: rgba(15, 23, 42, 0.4);
+            border-radius: var(--radius-sm);
+            margin-bottom: 0.45rem;
             overflow: hidden;
+            transition: border-color 0.15s;
         }}
+
+        .group-item.open {{ border-color: var(--border2); }}
 
         .group-header {{
-            width: 100%;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            padding: 1rem 1.25rem;
-            background: transparent;
-            border: none;
-            color: var(--text-main);
-            font-family: inherit;
+            width: 100%; background: none; border: none;
+            color: var(--text); font-family: var(--sans);
             cursor: pointer;
-            transition: background 0.2s;
+            padding: 0.8rem 0.9rem;
+            display: flex; align-items: center; gap: 0.7rem;
+            text-align: left;
+            transition: background 0.15s;
         }}
 
-        .group-header:hover {{
-            background: rgba(51, 65, 85, 0.5);
+        .group-header:active {{ background: var(--surface3); }}
+
+        .group-icon {{
+            width: 30px; height: 30px; border-radius: 7px;
+            display: flex; align-items: center; justify-content: center;
+            font-size: 0.85rem; flex-shrink: 0;
         }}
+
+        .group-icon.inc {{ background: var(--green-dim); color: var(--green); }}
+        .group-icon.exp {{ background: var(--red-dim);   color: var(--red); }}
+        .group-icon.cmp {{ background: var(--amber-dim); color: var(--amber); }}
+
+        .group-info {{ flex: 1; min-width: 0; }}
 
         .group-name {{
-            font-weight: 500;
-            display: flex;
-            align-items: center;
-            gap: 0.75rem;
-            text-align: left;
+            font-size: 0.8rem; font-weight: 500;
+            color: var(--text);
+            white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
+            line-height: 1.3;
         }}
 
-        .group-total-container {{
-            display: flex;
-            align-items: center;
-            gap: 1rem;
+        .movs-badge {{
+            font-size: 0.63rem; color: var(--muted);
+            background: var(--surface3);
+            padding: 0.08rem 0.35rem; border-radius: 4px; font-weight: 500;
+            display: inline-block; margin-top: 0.15rem;
         }}
 
-        .group-total {{
-            font-weight: 600;
-            font-family: monospace;
-            font-size: 1.1rem;
+        .group-right {{
+            display: flex; flex-direction: column; align-items: flex-end; gap: 0.2rem;
+            flex-shrink: 0;
         }}
 
+        .group-amount {{
+            font-family: var(--mono); font-size: 0.87rem; font-weight: 500;
+        }}
+
+        .group-amount.inc {{ color: var(--green); }}
+        .group-amount.exp {{ color: var(--red); }}
+        .group-amount.cmp {{ color: var(--amber); }}
+
+        .group-chevron {{
+            font-size: 0.78rem; color: var(--faint);
+            transition: transform 0.25s ease;
+        }}
+
+        .group-item.open .group-chevron {{ transform: rotate(180deg); }}
+
+        /* Transaction list */
         .group-content {{
             display: none;
-            padding: 1rem;
-            background: rgba(15, 23, 42, 0.8);
             border-top: 1px solid var(--border);
+            background: rgba(0,0,0,0.25);
         }}
 
-        .group-content.active {{
-            display: block;
+        .group-content.open {{ display: block; }}
+
+        .tx-list {{ padding: 0.4rem 0.75rem 0.65rem; }}
+
+        .tx-card {{
+            display: flex; justify-content: space-between; align-items: flex-start;
+            gap: 0.65rem; padding: 0.6rem 0;
+            border-bottom: 1px solid rgba(255,255,255,0.04);
         }}
 
-        /* Table */
-        .transactions-table {{
-            width: 100%;
-            border-collapse: collapse;
-            font-size: 0.875rem;
+        .tx-card:last-child {{ border-bottom: none; }}
+
+        .tx-left {{ flex: 1; min-width: 0; }}
+
+        .tx-desc {{
+            font-size: 0.77rem; color: var(--text);
+            font-weight: 400; line-height: 1.35;
+            word-break: break-word;
         }}
 
-        .transactions-table th, .transactions-table td {{
-            text-align: left;
-            padding: 0.75rem;
-            border-bottom: 1px solid rgba(51, 65, 85, 0.4);
+        .tx-meta {{
+            display: flex; align-items: center; gap: 0.45rem;
+            margin-top: 0.2rem; flex-wrap: wrap;
         }}
 
-        .transactions-table th {{
-            color: var(--text-muted);
-            font-weight: 500;
-            text-transform: uppercase;
-            font-size: 0.75rem;
-            letter-spacing: 0.05em;
+        .tx-date {{ font-size: 0.67rem; color: var(--muted); font-family: var(--mono); }}
+        .tx-nro {{
+            font-size: 0.62rem; color: var(--faint); font-family: var(--mono);
+            white-space: nowrap; overflow: hidden; text-overflow: ellipsis; max-width: 110px;
         }}
 
-        .transactions-table tr:last-child td {{
-            border-bottom: none;
-        }}
-        
-        .transactions-table tr:hover {{
-            background-color: rgba(51, 65, 85, 0.4);
+        .tx-amount {{
+            font-family: var(--mono); font-size: 0.83rem; font-weight: 500;
+            flex-shrink: 0;
         }}
 
-        .amount-cell {{
-            text-align: right;
-            font-family: monospace;
-            font-weight: 500;
-        }}
-
-        /* Utility */
-        .color-success {{ color: var(--success); }}
-        .color-danger {{ color: var(--danger); }}
-        .color-warning {{ color: var(--warning); }}
-        .badge {{
-            background: var(--surface-hover);
-            padding: 0.2rem 0.5rem;
-            border-radius: 0.25rem;
-            font-size: 0.75rem;
-            color: var(--text-muted);
-        }}
+        .tx-amount.inc {{ color: var(--green); }}
+        .tx-amount.exp {{ color: var(--red); }}
+        .tx-amount.cmp {{ color: var(--amber); }}
 
         .empty-state {{
-            padding: 2rem;
-            text-align: center;
-            color: var(--text-muted);
+            padding: 1.75rem 1rem; text-align: center;
+            color: var(--muted); font-size: 0.82rem;
         }}
+
+        .empty-state i {{ font-size: 1.75rem; margin-bottom: 0.5rem; display: block; opacity: 0.35; }}
+
+        /* Desktop */
+        @media (min-width: 580px) {{
+            .container {{ padding: 1.5rem 1.25rem; }}
+            .month-header {{ padding: 1.1rem 1.4rem; }}
+            .mstat-value {{ font-size: 0.88rem; }}
+            .tab-panel {{ padding: 0.9rem; }}
+            .group-header {{ padding: 0.9rem 1.1rem; }}
+            .group-name {{ font-size: 0.85rem; }}
+            .group-amount {{ font-size: 0.95rem; }}
+            .tx-list {{ padding: 0.4rem 1rem 0.8rem; }}
+            .tx-desc {{ font-size: 0.82rem; }}
+            .tx-amount {{ font-size: 0.88rem; }}
+        }}
+
+        ::-webkit-scrollbar {{ width: 4px; height: 4px; }}
+        ::-webkit-scrollbar-track {{ background: transparent; }}
+        ::-webkit-scrollbar-thumb {{ background: var(--faint); border-radius: 2px; }}
     </style>
 </head>
 <body>
 
-    <header>
-        <div class="container header-content">
-            <div class="brand">
-                <i class="ph ph-bank"></i>
-                Dashboard Financiero
+<header>
+    <div class="header-inner">
+        <div class="brand">
+            <div class="brand-icon"><i class="ph ph-bank"></i></div>
+            <div>
+                <div class="brand-text">Dashboard</div>
+                <div class="brand-sub">Banco Macro</div>
             </div>
-            <div class="balance-summary" id="global-summary">
-                <!-- Se inyecta por JS -->
-            </div>
         </div>
-    </header>
+        <div class="global-pills" id="global-pills"></div>
+    </div>
+</header>
 
-    <main class="container">
-        
-        <div class="account-selector" id="account-selector">
-            <button class="acc-btn active" id="btn-CA" onclick="selectAccount('CA')">
-                <i class="ph ph-wallet"></i> Caja de Ahorro
-            </button>
-            <button class="acc-btn" id="btn-CC" onclick="selectAccount('CC')">
-                <i class="ph ph-briefcase"></i> Cuenta Corriente
-            </button>
-        </div>
+<main class="container">
+    <div class="account-tabs">
+        <button class="acc-btn active" id="btn-CA" onclick="selectAccount('CA')">
+            <i class="ph ph-wallet"></i> Caja de Ahorro
+        </button>
+        <button class="acc-btn" id="btn-CC" onclick="selectAccount('CC')">
+            <i class="ph ph-briefcase"></i> Cta. Corriente
+        </button>
+    </div>
+    <div id="dashboard"></div>
+</main>
 
-        <div id="dashboard-container">
-            <!-- Dashboard items will be rendered here -->
-        </div>
+<script>
+    const allData = {json_data};
+    let currentAccount = 'CA';
 
-    </main>
+    const fmt = (v) => new Intl.NumberFormat('es-AR', {{style:'currency',currency:'ARS',maximumFractionDigits:0}}).format(v);
+    const fmtFull = (v) => new Intl.NumberFormat('es-AR', {{style:'currency',currency:'ARS'}}).format(v);
 
-    <script>
-        const allData = {json_data};
-        let currentAccount = 'CA'; 
+    function selectAccount(acc) {{
+        currentAccount = acc;
+        ['CA','CC'].forEach(a => document.getElementById('btn-'+a).classList.toggle('active', a===acc));
+        render();
+    }}
 
-        const formatCurrency = (val) => {{
-            return new Intl.NumberFormat('es-AR', {{ style: 'currency', currency: 'ARS' }}).format(val);
-        }};
+    function render() {{
+        const data = allData[currentAccount] || [];
+        const container = document.getElementById('dashboard');
+        const pills = document.getElementById('global-pills');
 
-        function selectAccount(acc) {{
-            currentAccount = acc;
-            
-            document.getElementById('btn-CA').classList.remove('active');
-            document.getElementById('btn-CC').classList.remove('active');
-            
-            const activeBtn = document.getElementById('btn-' + acc);
-            if (activeBtn) activeBtn.classList.add('active');
-            
-            renderDashboard();
+        if (!data.length) {{
+            container.innerHTML = '<div class="empty-state"><i class="ph ph-folder-open"></i>Sin datos</div>';
+            pills.innerHTML = '';
+            return;
         }}
 
-        function renderDashboard() {{
-            const container = document.getElementById('dashboard-container');
-            const summaryContainer = document.getElementById('global-summary');
-            
-            const data = allData[currentAccount] || [];
+        let gInc=0, gExp=0, gCmp=0;
+        data.forEach(m => {{ gInc+=m.totalIngresos; gExp+=m.totalGastos; gCmp+=m.totalCompensaciones; }});
 
-            let globalInc = 0;
-            let globalExp = 0;
-            let globalComp = 0;
+        pills.innerHTML = `
+            <span class="gpill inc"><i class="ph ph-trend-up"></i>${{fmt(gInc)}}</span>
+            <span class="gpill exp"><i class="ph ph-trend-down"></i>${{fmt(gExp)}}</span>
+            <span class="gpill cmp"><i class="ph ph-arrows-left-right"></i>${{fmt(gCmp)}}</span>
+        `;
 
-            if (data.length === 0) {{
-                container.innerHTML = `<div class="empty-state">No se encontraron datos para esta cuenta</div>`;
-                summaryContainer.innerHTML = '';
-                return;
-            }}
-
-            let html = '';
-
-            data.forEach((monthData, mIndex) => {{
-                globalInc += monthData.totalIngresos;
-                globalExp += monthData.totalGastos;
-                globalComp += monthData.totalCompensaciones;
-
-                html += `
-                <div class="accordion-item">
-                    <button class="accordion-header" onclick="toggleAccordion('month-${{mIndex}}')">
-                        <div class="month-title">
+        container.innerHTML = data.map((m, mi) => {{
+            const bal = m.balance;
+            const chip = `<span class="balance-chip ${{bal>=0?'pos':'neg'}}"><i class="ph ${{bal>=0?'ph-arrow-up':'ph-arrow-down'}}"></i>${{fmtFull(Math.abs(bal))}}</span>`;
+            return `
+            <div class="month-card" id="mc-${{mi}}">
+                <button class="month-header" onclick="toggleMonth(${{mi}})">
+                    <div class="month-header-top">
+                        <div class="month-label">
                             <i class="ph ph-calendar-blank"></i>
-                            ${{monthData.monthName}} ${{monthData.year}}
+                            <span class="month-name">${{m.monthName}} ${{m.year}}</span>
+                            ${{chip}}
                         </div>
-                        <div class="month-stats">
-                            <div class="stat inc">
-                                <span>Ingresos</span>
-                                <span>${{formatCurrency(monthData.totalIngresos)}}</span>
-                            </div>
-                            <div class="stat exp">
-                                <span>Gastos</span>
-                                <span>${{formatCurrency(monthData.totalGastos)}}</span>
-                            </div>
-                            <div class="stat comp">
-                                <span>Compensac.</span>
-                                <span>${{formatCurrency(monthData.totalCompensaciones)}}</span>
-                            </div>
-                            <i class="ph ph-caret-down accordion-icon"></i>
-                        </div>
-                    </button>
-                    <div class="accordion-content" id="month-${{mIndex}}">
-                        
-                        <div class="type-tabs">
-                            <button class="type-tab active" onclick="switchTab(this, 'gastos-${{mIndex}}', 'month-${{mIndex}}')">Gastos</button>
-                            <button class="type-tab" onclick="switchTab(this, 'ingresos-${{mIndex}}', 'month-${{mIndex}}')">Ingresos</button>
-                            <button class="type-tab" onclick="switchTab(this, 'comp-${{mIndex}}', 'month-${{mIndex}}')">Compensaciones</button>
-                        </div>
+                        <i class="ph ph-caret-down month-chevron"></i>
+                    </div>
+                    <div class="month-stats">
+                        <div class="mstat inc"><div class="mstat-label">Ingresos</div><div class="mstat-value">${{fmt(m.totalIngresos)}}</div></div>
+                        <div class="mstat exp"><div class="mstat-label">Gastos</div><div class="mstat-value">${{fmt(m.totalGastos)}}</div></div>
+                        <div class="mstat cmp"><div class="mstat-label">Compensac.</div><div class="mstat-value">${{fmt(m.totalCompensaciones)}}</div></div>
+                    </div>
+                </button>
+                <div class="month-content" id="mcon-${{mi}}">
+                    <div class="type-tabs" id="ttabs-${{mi}}">
+                        <button class="type-tab active" onclick="switchTab(${{mi}},'gastos')">Gastos</button>
+                        <button class="type-tab" onclick="switchTab(${{mi}},'ingresos')">Ingresos</button>
+                        <button class="type-tab" onclick="switchTab(${{mi}},'comp')">Compensaciones</button>
+                    </div>
+                    <div class="tab-panel" id="tp-${{mi}}-gastos">${{renderGroups(m.gastos,'exp',mi,'gastos')}}</div>
+                    <div class="tab-panel" id="tp-${{mi}}-ingresos" style="display:none">${{renderGroups(m.ingresos,'inc',mi,'ingresos')}}</div>
+                    <div class="tab-panel" id="tp-${{mi}}-comp" style="display:none">${{renderGroups(m.compensaciones,'cmp',mi,'comp')}}</div>
+                </div>
+            </div>`;
+        }}).join('');
+    }}
 
-                        <div id="gastos-${{mIndex}}" class="tab-content" style="display:block;">
-                            ${{renderGroupList(monthData.gastos, 'gasto', mIndex)}}
-                        </div>
+    function renderGroups(groups, cls, mi, type) {{
+        if (!groups || !groups.length) return '<div class="empty-state"><i class="ph ph-receipt"></i>Sin movimientos</div>';
+        const iconMap = {{inc:'ph-arrow-up-right', exp:'ph-arrow-down-right', cmp:'ph-arrows-left-right'}};
+        const icon = iconMap[cls];
+        return groups.map((g, gi) => {{
+            const id = `g-${{mi}}-${{type}}-${{gi}}`;
+            return `
+            <div class="group-item" id="gi-${{id}}">
+                <button class="group-header" onclick="toggleGroup('${{id}}')">
+                    <div class="group-icon ${{cls}}"><i class="ph ${{icon}}"></i></div>
+                    <div class="group-info">
+                        <div class="group-name">${{g.descripcion}}</div>
+                        <span class="movs-badge">${{g.items.length}} mov${{g.items.length!==1?'s':''}}</span>
+                    </div>
+                    <div class="group-right">
+                        <span class="group-amount ${{cls}}">${{fmtFull(g.total)}}</span>
+                        <i class="ph ph-caret-down group-chevron"></i>
+                    </div>
+                </button>
+                <div class="group-content" id="${{id}}">
+                    <div class="tx-list">${{renderTxs(g.items, cls)}}</div>
+                </div>
+            </div>`;
+        }}).join('');
+    }}
 
-                        <div id="ingresos-${{mIndex}}" class="tab-content" style="display:none;">
-                            ${{renderGroupList(monthData.ingresos, 'ingreso', mIndex)}}
-                        </div>
-                        
-                        <div id="comp-${{mIndex}}" class="tab-content" style="display:none;">
-                            ${{renderGroupList(monthData.compensaciones, 'compensacion', mIndex)}}
-                        </div>
-
+    function renderTxs(items, cls) {{
+        return items.map(item => `
+            <div class="tx-card">
+                <div class="tx-left">
+                    <div class="tx-desc">${{item['descripci\u00f3n'] || item.descripcion || '\u2014'}}</div>
+                    <div class="tx-meta">
+                        <span class="tx-date">${{item.fecha}}</span>
+                        <span class="tx-nro">#${{item.nro}}</span>
                     </div>
                 </div>
-                `;
-            }});
+                <div class="tx-amount ${{cls}}">${{fmtFull(item.importe)}}</div>
+            </div>
+        `).join('');
+    }}
 
-            container.innerHTML = html;
+    function toggleMonth(mi) {{
+        const card = document.getElementById('mc-'+mi);
+        const content = document.getElementById('mcon-'+mi);
+        const isOpen = card.classList.toggle('open');
+        content.classList.toggle('open', isOpen);
+    }}
 
-            summaryContainer.innerHTML = `
-                <div class="balance-item success">
-                    <i class="ph ph-trend-up"></i>
-                    ${{formatCurrency(globalInc)}}
-                </div>
-                <div class="balance-item danger">
-                    <i class="ph ph-trend-down"></i>
-                    ${{formatCurrency(globalExp)}}
-                </div>
-                <div class="balance-item warning" title="Total Compensaciones">
-                    <i class="ph ph-arrows-left-right"></i>
-                    ${{formatCurrency(globalComp)}}
-                </div>
-            `;
-        }}
+    function toggleGroup(id) {{
+        const item = document.getElementById('gi-'+id);
+        const content = document.getElementById(id);
+        const isOpen = item.classList.toggle('open');
+        content.classList.toggle('open', isOpen);
+    }}
 
-        function renderGroupList(groups, type, mIndex) {{
-            if (groups.length === 0) return `<div class="empty-state">No hay registros</div>`;
-            
-            let html = '';
-            groups.forEach((g, gIndex) => {{
-                let colorClass = type === 'ingreso' ? 'color-success' : 
-                                 type === 'gasto' ? 'color-danger' : 'color-warning';
-                let icon = type === 'ingreso' ? 'ph-arrow-up-right' : 
-                           type === 'gasto' ? 'ph-arrow-down-right' : 'ph-arrows-left-right';
-                const id = `${{type}}-${{mIndex}}-${{gIndex}}`;
-                
-                html += `
-                <div class="group-accordion">
-                    <button class="group-header" onclick="toggleGroupAccordion('${{id}}')">
-                        <div class="group-name">
-                            <i class="ph ${{icon}} ${{colorClass}}"></i>
-                            ${{g.descripcion}}
-                            <span class="badge">${{g.items.length}} movs</span>
-                        </div>
-                        <div class="group-total-container">
-                            <span class="group-total ${{colorClass}}">${{formatCurrency(g.total)}}</span>
-                            <i class="ph ph-caret-down accordion-icon text-muted"></i>
-                        </div>
-                    </button>
-                    <div class="group-content" id="${{id}}">
-                        <table class="transactions-table">
-                            <thead>
-                                <tr>
-                                    <th>Fecha</th>
-                                    <th>Nro. Transacción</th>
-                                    <th>Descripción</th>
-                                    <th class="amount-cell">Importe</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                ${{g.items.map(item => `
-                                <tr>
-                                    <td>${{item.fecha}}</td>
-                                    <td>${{item.nro}}</td>
-                                    <td>${{item.descripción}}</td>
-                                    <td class="amount-cell ${{colorClass}}">${{formatCurrency(item.importe)}}</td>
-                                </tr>
-                                `).join('')}}
-                            </tbody>
-                        </table>
-                    </div>
-                </div>
-                `;
-            }});
-            return html;
-        }}
+    function switchTab(mi, tab) {{
+        ['gastos','ingresos','comp'].forEach(t => {{
+            document.getElementById(`tp-${{mi}}-${{t}}`).style.display = t===tab ? '' : 'none';
+        }});
+        document.getElementById('ttabs-'+mi).querySelectorAll('.type-tab').forEach((btn,i) => {{
+            btn.classList.toggle('active', ['gastos','ingresos','comp'][i]===tab);
+        }});
+    }}
 
-        function toggleAccordion(id) {{
-            const content = document.getElementById(id);
-            const header = content.previousElementSibling;
-            
-            content.classList.toggle('active');
-            header.classList.toggle('active');
-        }}
-
-        function toggleGroupAccordion(id) {{
-            const content = document.getElementById(id);
-            const header = content.previousElementSibling;
-            
-            content.classList.toggle('active');
-            header.classList.toggle('active');
-        }}
-
-        function switchTab(btn, showId, containerId) {{
-            // active button
-            const siblings = btn.parentElement.children;
-            for(let s of siblings) s.classList.remove('active');
-            btn.classList.add('active');
-
-            // Find all content tabs inside the current month accordion container
-            const currentAccordion = document.getElementById(containerId);
-            const allTabs = currentAccordion.querySelectorAll('.tab-content');
-            allTabs.forEach(tab => {{
-                tab.style.display = 'none';
-            }});
-
-            // Show selected
-            document.getElementById(showId).style.display = 'block';
-        }}
-
-        // Initialize with logic to choose CA or CC
-        if (allData['CA'] && allData['CA'].length > 0) {{
-            selectAccount('CA');
-        }} else if (allData['CC'] && allData['CC'].length > 0) {{
-            selectAccount('CC');
-        }} else {{
-            selectAccount('CA'); // Default if empty
-        }}
-    </script>
+    if (allData['CA']?.length) selectAccount('CA');
+    else if (allData['CC']?.length) selectAccount('CC');
+    else selectAccount('CA');
+</script>
 </body>
 </html>
 """
