@@ -1,0 +1,14 @@
+# Datos bancarios sensibles - NO subir al repositorio
+*.xlsx
+*.xls
+*.csv
+
+# Archivos temporales
+*.txt
+__pycache__/
+*.pyc
+*.pyo
+.env
+
+# VS Code
+.vscode/
