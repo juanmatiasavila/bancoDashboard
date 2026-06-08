@@ -230,24 +230,24 @@ def main():
     <script src="https://unpkg.com/@phosphor-icons/web"></script>
     <style>
         :root {{
-            --bg:       #000000;
-            --surface:  #121212;
-            --surface2: #1e1e1e;
-            --surface3: #2a2a2a;
-            --border:   rgba(255,255,255,0.15);
-            --border2:  rgba(255,255,255,0.25);
-            --text:     #ffffff;
-            --muted:    #b0b0b0;
-            --faint:    #606060;
-            --gold:     #ffcc00;
-            --gold-dim: rgba(255,204,0,0.15);
-            --gold-glow:rgba(255,204,0,0.08);
-            --green:    #00ff88;
-            --green-dim:rgba(0,255,136,0.15);
-            --red:      #ff4444;
-            --red-dim:  rgba(255,68,68,0.15);
-            --amber:    #ffaa00;
-            --amber-dim:rgba(255,170,0,0.15);
+            --bg:       #ffffff;
+            --surface:  #f4f4f5;
+            --surface2: #e8e8ea;
+            --surface3: #dcdcde;
+            --border:   rgba(0,0,0,0.12);
+            --border2:  rgba(0,0,0,0.24);
+            --text:     #111111;
+            --muted:    #555555;
+            --faint:    #999999;
+            --gold:     #9a6e00;
+            --gold-dim: rgba(154,110,0,0.1);
+            --gold-glow:rgba(154,110,0,0.06);
+            --green:    #007a3d;
+            --green-dim:rgba(0,122,61,0.1);
+            --red:      #c41a1a;
+            --red-dim:  rgba(196,26,26,0.1);
+            --amber:    #b86800;
+            --amber-dim:rgba(184,104,0,0.1);
             --serif:    'DM Serif Display', Georgia, serif;
             --sans:     'Figtree', system-ui, sans-serif;
             --mono:     'DM Mono', 'Courier New', monospace;
@@ -282,7 +282,7 @@ def main():
             background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.04'/%3E%3C/svg%3E");
             pointer-events: none;
             z-index: 0;
-            opacity: 0.6;
+            opacity: 0.15;
         }}
 
         /* Header */
@@ -290,7 +290,7 @@ def main():
             position: sticky;
             top: 0;
             z-index: 100;
-            background: rgba(10,10,15,0.88);
+            background: rgba(255,255,255,0.92);
             backdrop-filter: blur(20px) saturate(1.4);
             -webkit-backdrop-filter: blur(20px) saturate(1.4);
             border-bottom: 1px solid var(--border);
@@ -312,7 +312,7 @@ def main():
             width: 34px; height: 34px;
             border-radius: 9px;
             background: var(--gold-dim);
-            border: 1px solid rgba(201,168,76,0.3);
+            border: 1px solid rgba(154,110,0,0.35);
             display: flex; align-items: center; justify-content: center;
             color: var(--gold);
             font-size: 1rem;
